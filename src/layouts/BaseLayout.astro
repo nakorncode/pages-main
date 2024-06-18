@@ -1,0 +1,61 @@
+---
+import '@fontsource/sarabun/400.css';
+import '@fontsource/sarabun/700.css';
+import { Image } from 'astro:assets'
+import nakorncodeLabelImage from '../assets/nakorncode-label.png'
+const title = 'นครโค้ด สอนพัฒนาโปรแกรม'
+const currentPathname = new URL(Astro.request.url).pathname
+
+function isActiveLink(url: string, isExact?: boolean): 'navbar-link-active' | undefined {
+  return (isExact ? currentPathname === url : currentPathname.startsWith(url))
+    ? 'navbar-link-active'
+    : undefined
+}
+---
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+</head>
+<body>
+  <nav class="py-4">
+    <div class="container">
+      <div class="flex items-center gap-2">
+        <a href="/">
+          <Image class="w-20" src={nakorncodeLabelImage} alt={title}></Image>
+        </a>
+        <ul class="flex items-center gap-1">
+          <li><a class:list={['navbar-link', isActiveLink('/', true)]} href="/">หน้าหลัก</a></li>
+          <li><a class:list={['navbar-link', isActiveLink('/courses')]} href="/courses">คอร์สเรียนฟรี</a></li>
+          <li><a class:list={['navbar-link', isActiveLink('/cheatsheets')]} href="/cheatsheets">สูตรโกงเขียนโค้ด</a></li>
+          <li><a class:list={['navbar-link', isActiveLink('/about')]} href="/about">เกี่ยวกับผู้สอน</a></li>
+        </ul>
+        <ul class="ml-auto flex items-center gap-1">
+          <li><a class="navbar-link" href="https://www.youtube.com/@nakorncode">YouTube</a></li>
+          <li><a class="navbar-link" href="https://www.facebook.com/nakorncode">Facebook</a></li>
+          <li><a class="navbar-link" href="https://github.com/nakorncode">GitHub</a></li>
+          <li><a class="navbar-link" href="/">Discord</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="mt-4">
+    <div class="container">
+      <slot></slot>
+    </div>
+  </main>
+</body>
+</html>
+
+<style>
+  .navbar-link {
+    @apply py-2 px-3 rounded-md hover:bg-slate-200 transition;
+  }
+  .navbar-link-active {
+    @apply bg-blue-700 text-white hover:bg-blue-900;
+  }
+</style>
