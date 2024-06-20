@@ -20,7 +20,14 @@ function isActiveLink(url: string, isExact?: boolean): 'navbar-link-active' | un
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title}</title>
 </head>
-<body>
+<body class="text-gray-800">
+  <section id="notification" class="text-sm py-1 px-3 bg-yellow-100 text-yellow-900 font-bold shadow flex justify-center items-center gap-3">
+    <p>
+      ยินดีต้อนรับสู่เว็บไซต์ "นครโค้ด" รูปแบบใหม่ของเรา เพื่อรองรับกับเนื้อหาใหม่ที่กำลังจัดทำ หากต้องการเข้าเว็บไซต์เก่าสามารถดูได้ที่ <a href="https://archive.nakorncode.com/" class="link">https://archive.nakorncode.com/</a>
+    </p>
+    <button type="button" class="bg-blue-700 text-white hover:bg-blue-900 transition py-1 px-2 rounded shadow" onclick="closeNotification()">ปิดข้อความ</button>
+  </section>
+
   <nav class="py-4">
     <div class="container">
       <div class="flex items-center gap-2">
@@ -30,14 +37,15 @@ function isActiveLink(url: string, isExact?: boolean): 'navbar-link-active' | un
         <ul class="flex items-center gap-1">
           <li><a class:list={['navbar-link', isActiveLink('/', true)]} href="/">หน้าหลัก</a></li>
           <li><a class:list={['navbar-link', isActiveLink('/courses')]} href="/courses">คอร์สเรียนฟรี</a></li>
+          <!-- <li><a class:list={['navbar-link', isActiveLink('/workshops')]} href="/workshops">คอร์สเรียนพิเศษ</a></li> -->
           <li><a class:list={['navbar-link', isActiveLink('/cheatsheets')]} href="/cheatsheets">สูตรโกงเขียนโค้ด</a></li>
-          <li><a class:list={['navbar-link', isActiveLink('/about')]} href="/about">เกี่ยวกับผู้สอน</a></li>
+          <li><a class="navbar-link" href="https://archive.nakorncode.com/">เว็บไซต์เก่า</a></li>
         </ul>
         <ul class="ml-auto flex items-center gap-1">
           <li><a class="navbar-link" href="https://www.youtube.com/@nakorncode">YouTube</a></li>
           <li><a class="navbar-link" href="https://www.facebook.com/nakorncode">Facebook</a></li>
           <li><a class="navbar-link" href="https://github.com/nakorncode">GitHub</a></li>
-          <li><a class="navbar-link" href="/">Discord</a></li>
+          <li><a class="navbar-link" href="https://discord.gg/fPtPJgWcF3">Discord</a></li>
         </ul>
       </div>
     </div>
@@ -48,8 +56,24 @@ function isActiveLink(url: string, isExact?: boolean): 'navbar-link-active' | un
       <slot></slot>
     </div>
   </main>
+
 </body>
 </html>
+
+<script is:inline>
+  const notificationEl = document.getElementById('notification')
+  const notificationClosedKey = 'notificationClosed'
+  const isClosed = localStorage.getItem(notificationClosedKey)
+  if (isClosed === 'true') {
+    notificationEl.style.display = 'none'
+  }
+  function closeNotification() {
+    if (notificationEl) {
+      notificationEl.style.display = 'none'
+      localStorage.setItem(notificationClosedKey, 'true')
+    }
+  }
+</script>
 
 <style>
   .navbar-link {
@@ -57,5 +81,11 @@ function isActiveLink(url: string, isExact?: boolean): 'navbar-link-active' | un
   }
   .navbar-link-active {
     @apply bg-blue-700 text-white hover:bg-blue-900;
+  }
+</style>
+
+<style is:global>
+  .link {
+    @apply text-blue-700 underline hover:text-blue-900 transition;
   }
 </style>

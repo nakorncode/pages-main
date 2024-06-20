@@ -3,28 +3,49 @@ import { getCollection } from "astro:content";
 import HeaderCard from "../components/HeaderCard.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const courses = await getCollection('courses')
+const playlist = await getCollection('playlist')
 ---
 
 <BaseLayout>
   <HeaderCard>
     <h1 class="font-bold text-2xl text-blue-900">รวมคอร์สเรียนฟรี สำหรับการพัฒนาโปรแกรม ในสายงาน Full-stack Web Developer</h1>
-    <p class="mt-2">รับชมคอร์สเรียนฟรีผ่านทาง YouTube โดย นครโค้ด</p>
+    <p class="mt-2">รับชมคอร์สเรียนฟรีผ่านทาง YouTube โดย นครโค้ด เรียนแบบตามลำดับ Step-by-step ทำให้ผู้เรียนเข้าใจลำดับการเรียนมากขึ้น</p>
   </HeaderCard>
 
   <div class="my-8">
-    <blockquote class="ml-2 pl-4 border-l-4 italic text-gray-800">
-      สำหรับผู้เรียนใหม่ แนะนำให้เรียนตามลำดับจากเนื้อหาชุดแรก เพื่อทำความเข้าใจก่อนเริ่มเนื้อหาอื่นๆต่อไป หากสับสนลำดับการเรียนผ่างทาง YouTube แนะนำให้ดูตามลำดับที่เว็บไซต์นี้ จะถูกเรียงให้เหมาะสมแก่ผู้เรียนมากที่สุด
+    <blockquote class="ml-2 pl-6 pr-4 py-4 rounded bg-gray-50 border-l-4">
+      สำหรับผู้เรียนใหม่ สามารถเริ่มเรียนจากคอร์สเรียนแรกตามลำดับได้เลย! หากมีการลำดับสับสนระหว่างเรียนผ่าน YouTube แนะนำให้กลับมาดูที่เว็บไซต์ <a href="https://nakorncode.com/" class="link">https://nakorncode.com/</a> (นครโค้ด) เว็บหลักของเราอีกครั้ง
     </blockquote>
   </div>
 
   <div>
-    <ul>
-      {courses.map(course => (
+    <ul class="flex flex-col gap-4">
+      {playlist.map((course, i) => (
         <li>
-          <a href={course.slug}>{course.data.title}</a>
+          <a href={course.slug} class="flex items-stretch rounded-lg transition hover:shadow-md">
+            <div class="w-64">
+              <img src={course.data.image} alt={course.data.title} class="rounded-l-lg">
+            </div>
+            <div class="flex-1 border flex flex-col gap-3 p-4 rounded-r-lg">
+              <h2 class="text-lg font-bold">
+                {i + 1}. {course.data.title}
+              </h2>
+              <div>{course.data.description}</div>
+              <ul>
+                <li><a href={course.data.url.youtube}>รับชมบน YouTube</a></li>
+              </ul>
+            </div>
+          </a>
         </li>
       ))}
+      <li class="text-center bg-gray-50 py-4 px-2 rounded-lg mt-2 text-lg">
+        กำลังจัดทำคอร์สเรียนอื่นๆอย่างต่อเนื่อง สามารถติดตามได้ที่
+        <ul class="inline-flex gap-2">
+          <li><a class="link" href="https://www.youtube.com/@nakorncode">YouTube</a></li>
+          <li><a class="link" href="https://www.facebook.com/nakorncode">Facebook</a></li>
+          <li><a class="link" href="https://discord.gg/fPtPJgWcF3">Discord</a></li>
+        </ul>
+      </li>
     </ul>
   </div>
 </BaseLayout>
