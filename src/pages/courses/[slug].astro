@@ -6,22 +6,20 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 export const getStaticPaths = (async () => {
   const courses = await getCollection('courses')
   return courses.map(course => {
-    const [dirWithNo, slugWithNo] = course.id.split('/')
-    const dir = dirWithNo.match(/(?<=-).+/g)?.[0]
-    const slug = slugWithNo.match(/(?<=-).+(?=\..+)/g)?.[0]
-    if (!dir || !slug) {
-      throw new Error(`dir or slug pattern is incorrect on ${course.id}`)
-    }
     return {
-      params: { dir, slug },
-      props: course
+      params: { slug: course.slug },
+      props: { course }
     }
   })
 }) satisfies GetStaticPaths
 
-const { body } = Astro.props
+const { course } = Astro.props
+const { Content } = await course.render()
 ---
 
 <BaseLayout>
-  <Fragment set:html={body}></Fragment>
+  <h1 class="text-2xl font-bold mb-6">{course.data.title}</h1>
+  <main class="prose max-w-none">
+    <Content></Content>
+  </main>
 </BaseLayout>

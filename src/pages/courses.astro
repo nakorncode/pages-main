@@ -2,8 +2,9 @@
 import { getCollection } from "astro:content";
 import HeaderCard from "../components/HeaderCard.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { Icon } from 'astro-icon/components';
 
-const playlist = await getCollection('playlist')
+const courses = await getCollection('courses')
 ---
 
 <BaseLayout>
@@ -20,22 +21,46 @@ const playlist = await getCollection('playlist')
 
   <div>
     <ul class="flex flex-col gap-4">
-      {playlist.map((course, i) => (
+      {courses.map((course, i) => (
         <li>
-          <a href={course.slug} class="flex items-stretch rounded-lg transition hover:shadow-md">
-            <div class="w-64">
-              <img src={course.data.image} alt={course.data.title} class="rounded-l-lg">
+          <div class="flex items-stretch rounded-lg transition hover:shadow-md">
+            <div class="w-64 flex">
+              <img src={course.data.image} alt={course.data.title} class="rounded-l-lg object-cover"/>
             </div>
             <div class="flex-1 border flex flex-col gap-3 p-4 rounded-r-lg">
               <h2 class="text-lg font-bold">
-                {i + 1}. {course.data.title}
+                <a class="link" href={`/courses/${course.slug}`}>{i + 1}. {course.data.title}</a>
               </h2>
               <div>{course.data.description}</div>
-              <ul>
-                <li><a href={course.data.url.youtube}>รับชมบน YouTube</a></li>
+              <ul class="mt-2 flex flex-wrap items-center gap-1">
+                <li>
+                  <a class="course-btn bg-blue-700 hover:bg-blue-900" href={`/courses/${course.slug}`}>
+                    <Icon name="mdi:file-find"></Icon>
+                    <span>ดูรายละเอียด</span>
+                  </a>
+                </li>
+                <li>
+                  <a class="course-btn bg-red-600 hover:bg-red-800" href={course.data.url.youtube}>
+                    <Icon name="mdi:youtube"></Icon>
+                    <span>รับชมบน YouTube</span>
+                  </a>
+                </li>
+                {course.data.url.docs &&
+                  <li>
+                    <a class="course-btn bg-gray-600 hover:bg-gray-800" href={course.data.url.docs}>
+                      <Icon name="mdi:file-document"></Icon>
+                      <span>เอกสาร</span>
+                    </a>
+                  </li>
+                }
+                {course.data.url.other && course.data.url.other.map(({ url, label }) => (
+                  <li>
+                    <a class="course-btn bg-gray-600 hover:bg-gray-800" href={url}>{label}</a>
+                  </li>
+                ))}
               </ul>
             </div>
-          </a>
+          </div>
         </li>
       ))}
       <li class="text-center bg-gray-50 py-4 px-2 rounded-lg mt-2 text-lg">
@@ -49,3 +74,12 @@ const playlist = await getCollection('playlist')
     </ul>
   </div>
 </BaseLayout>
+
+<style>
+[data-icon] {
+  @apply text-xl
+}
+.course-btn {
+  @apply flex items-center gap-1 px-3 py-2 text-white rounded-md transition;
+}
+</style>

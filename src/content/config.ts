@@ -1,7 +1,7 @@
 import { z, defineCollection } from 'astro:content'
 
 export const collections = {
-  courses: defineCollection({
+  episodes: defineCollection({
     type: 'content',
     schema: z.object({
       title: z.string(),
@@ -10,7 +10,7 @@ export const collections = {
       previewImages: z.array(z.string())
     })
   }),
-  playlist: defineCollection({
+  courses: defineCollection({
     type: 'content',
     schema: z.object({
       title: z.string(),
@@ -19,7 +19,11 @@ export const collections = {
       description: z.string(),
       url: z.object({
         youtube: z.string().url(),
-        docs: z.string().url().optional()
+        docs: z.string().url().optional(),
+        other: z.array(z.object({
+          label: z.string(),
+          url: z.string()
+        })).optional()
       })
     })
   })
