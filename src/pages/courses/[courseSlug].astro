@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { Icon } from 'astro-icon/components';
 import CourseGenericButtons from '../../components/CourseGenericButtons.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
 
 export const getStaticPaths = (async () => {
   const courses = await getCollection('courses')
@@ -17,7 +18,7 @@ export const getStaticPaths = (async () => {
         return episode.id.startsWith(courseId)
       })
       return {
-        params: { slug: course.slug.match(/([^/]+)$/)?.[0] },
+        params: { courseSlug: course.slug.match(/([^/]+)$/)?.[0] },
         props: { course, episodes }
       }
     })
@@ -30,29 +31,22 @@ const courseNo = String(course.id.match(/^\d/)?.[0])
 ---
 
 <BaseLayout>
-  <ul class="breadcrumb-list bg-gray-100 py-2 px-4 rounded-lg text-sm mb-6">
-    <li>
-      <a href="/courses" class="link">
-        <span>คอร์สเรียนฟรี</span>
-      </a>
-    </li>
-    <li class="breadcrumb-list">
-      <Icon name="mdi:chevron-right" size={16}></Icon>
-      <a href={course.slug} class="link">
-        <span>{courseNo}. {course.data.title}</span>
-      </a>
-    </li>
-  </ul>
+  <Breadcrumb list={[
+    { label: 'คอร์สเรียนฟรี', url: '/courses' },
+    { label: `${courseNo}. ${course.data.title}`, url: course.slug }
+  ]}></Breadcrumb>
   <section class="flex items-start gap-6">
-    <img class="w-64 rounded-lg" src={course.data.image} alt={course.data.title}/>
+    <div class="max-w-64">
+      <img class="w-full rounded-lg" src={course.data.image} alt={course.data.title}/>
+      <div class="mt-4">
+        <CourseGenericButtons data={course} hideDetailButton={true} horizon={true}></CourseGenericButtons>
+      </div>
+    </div>
     <div>
       <h1 class="text-xl font-bold mb-2">{courseNo}. {course.data.title}</h1>
       <p class="text-sm text-gray-600 mb-4">{course.data.description}</p>
       <div class="prose max-w-none">
         <Content></Content>
-      </div>
-      <div class="mt-4">
-        <CourseGenericButtons data={course}></CourseGenericButtons>
       </div>
       <ul class="mt-5 flex flex-wrap gap-1 text-xs text-gray-500">
         <li>Tags:</li>
@@ -85,12 +79,6 @@ const courseNo = String(course.id.match(/^\d/)?.[0])
 </BaseLayout>
 
 <style>
-.breadcrumb-list {
-  @apply flex items-center gap-1;
-}
-[data-icon] {
-  @apply text-lg
-}
 .episode-btn {
   @apply flex gap-1 items-center text-sm text-white px-2.5 py-1.5 rounded-md transition;
 }

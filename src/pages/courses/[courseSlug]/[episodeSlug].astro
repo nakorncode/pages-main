@@ -1,0 +1,59 @@
+---
+import type { GetStaticPaths } from "astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import { getEntry } from "astro:content";
+import Breadcrumb from "../../../components/Breadcrumb.astro";
+import CourseGenericButtons from "../../../components/CourseGenericButtons.astro";
+
+export const getStaticPaths = (async () => {
+  const episodes = await getCollection('episodes')
+  return await Promise.all(
+    episodes.map(async (episode) => {
+      const prefixCourseSlug = episode.slug.match(/(?<=\/[^\/]+\/)\w+/)?.[0]
+      const courseSlug = episode.slug.match(/^(\/[^\/]+\/[^\/]+)/)?.[0]
+      const episodeSlug = episode.slug.match(/([^/]+)$/)?.[0]
+      if (!prefixCourseSlug || !courseSlug || !episodeSlug) throw new Error('slug is undefined')
+      const course = await getEntry('courses', courseSlug)
+      if (!course) throw new Error('entry course is undefined')
+      return {
+        params: { courseSlug: prefixCourseSlug, episodeSlug },
+        props: { course, episode }
+      }
+    })
+  )
+}) satisfies GetStaticPaths
+
+const { course, episode } = Astro.props
+const courseNo = String(course.id.match(/^\d/)?.[0])
+const episodeNo = String(episode.id.match(/^\d/)?.[0])
+const { Content } = await episode.render()
+---
+
+<BaseLayout>
+  <Breadcrumb list={[
+    { label: 'คอร์สเรียนฟรี', url: '/courses' },
+    { label: `${courseNo}. ${course.data.title}`, url: course.slug },
+    { label: `${episodeNo}. ${episode.data.title}`, url: episode.slug }
+  ]}></Breadcrumb>
+  <section class="flex items-start gap-6">
+    <div class="max-w-64">
+      <img class="w-full rounded-lg" src={episode.data.image} alt={episode.data.title}/>
+      <div class="mt-4">
+        <CourseGenericButtons data={episode} hideDetailButton={true} horizon={true}></CourseGenericButtons>
+      </div>
+    </div>
+    <div>
+      <h1 class="text-xl font-bold mb-2">{episodeNo}. {episode.data.title}</h1>
+      <p class="text-sm text-gray-600 mb-4">{course.data.description}</p>
+      <hr class="my-6 border-t-2">
+      <div class="prose max-w-none">
+        <Content></Content>
+      </div>
+      <ul class="mt-5 flex flex-wrap gap-1 text-xs text-gray-500">
+        <li>Tags:</li>
+        {course.data.tags.map(tag => <li>{tag}</li>)}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

@@ -5,26 +5,33 @@ import { Icon } from 'astro-icon/components'
 interface Props {
   data: CollectionEntry<'courses'> | CollectionEntry<'episodes'>
   size?: 'sm'
+  hideDetailButton?: boolean
+  horizon?: boolean
 }
 
-const { size, data } = Astro.props
+const { size, data, hideDetailButton, horizon } = Astro.props
 ---
 
-<ul class="flex flex-wrap items-center gap-1" class:list={{'text-sm': size === 'sm'}}>
-  <li>
-    <a class="course-btn bg-blue-700 hover:bg-blue-900" class:list={{'course-btn-sm': size === 'sm'}} href={data.slug}>
-      <Icon name="mdi:file-find"></Icon>
-      <span>ดูรายละเอียด</span>
-    </a>
-  </li>
-  <li>
+<ul class="flex flex-wrap items-center gap-1" class:list={{
+  'text-sm': size === 'sm',
+  'flex-col': horizon
+}}>
+  {!hideDetailButton &&
+    <li class:list={{ 'course-btn-horizon-list': horizon }}>
+      <a class="course-btn bg-blue-700 hover:bg-blue-900" class:list={{'course-btn-sm': size === 'sm'}} href={data.slug}>
+        <Icon name="mdi:file-find"></Icon>
+        <span>ดูรายละเอียด</span>
+      </a>
+    </li>
+  }
+  <li class:list={{ 'course-btn-horizon-list': horizon }}>
     <a class="course-btn bg-red-600 hover:bg-red-800" class:list={{'course-btn-sm': size === 'sm'}} href={data.data.url.youtube}>
       <Icon name="mdi:youtube"></Icon>
       <span>รับชมบน YouTube</span>
     </a>
   </li>
   {data.data.url.docs &&
-    <li>
+    <li class:list={{ 'course-btn-horizon-list': horizon }}>
       <a class="course-btn bg-gray-600 hover:bg-gray-800" class:list={{'course-btn-sm': size === 'sm'}} href={data.data.url.docs}>
         <Icon name="mdi:file-document"></Icon>
         <span>เอกสาร</span>
@@ -32,7 +39,7 @@ const { size, data } = Astro.props
     </li>
   }
   {data.data.url.other && data.data.url.other.map(({ url, label }) => (
-    <li>
+    <li class:list={{ 'course-btn-horizon-list': horizon }}>
       <a class="course-btn bg-gray-600 hover:bg-gray-800" class:list={{'course-btn-sm': size === 'sm'}} href={url}>{label}</a>
     </li>
   ))}
@@ -43,9 +50,12 @@ const { size, data } = Astro.props
   @apply text-xl
 }
 .course-btn {
-  @apply flex items-center gap-1 px-3 py-2 text-white rounded-md transition;
+  @apply flex items-center justify-center gap-1 px-3 py-2 text-white rounded-md transition;
 }
 .course-btn-sm {
   @apply !px-2.5 py-1.5;
+}
+.course-btn-horizon-list {
+  @apply block w-full;
 }
 </style>

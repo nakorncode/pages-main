@@ -1,0 +1,42 @@
+---
+import { Icon } from 'astro-icon/components'
+
+interface Props {
+  list: {
+    label: string
+    url?: string
+  }[]
+}
+
+const { list } = Astro.props
+---
+
+<ul class="flex flex-wrap items-center gap-1 bg-gray-100 py-2 px-4 rounded-lg text-sm mb-6">
+  {list.map((it, i) => (
+    <li>
+      {it.url
+        ? (
+          <a class="breadcrumb-item link" href={it.url}>
+            {i > 0 && <Icon name="mdi:chevron-right" size={16}></Icon>}
+            <span>{it.label}</span>
+          </a>
+        )
+        : (
+          <span class="breadcrumb-item">
+            {i > 0 && <Icon name="mdi:chevron-right" size={16}></Icon>}
+            <span>{it.label}</span>
+          </span>
+        )
+      }
+    </li>
+  ))}
+</ul>
+
+<style>
+.breadcrumb-item {
+  @apply flex items-center gap-1;
+}
+[data-icon] {
+  @apply text-lg text-gray-700 no-underline;
+}
+</style>
