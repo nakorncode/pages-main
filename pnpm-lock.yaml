@@ -20,6 +20,9 @@ importers:
       '@fontsource/sarabun':
         specifier: ^5.0.20
         version: 5.0.20
+      '@iconify-json/ic':
+        specifier: ^1.1.17
+        version: 1.1.17
       '@iconify-json/mdi':
         specifier: ^1.1.67
         version: 1.1.67
@@ -373,6 +376,9 @@ packages:
 
   '@fontsource/sarabun@5.0.20':
     resolution: {integrity: sha512-CxPAhuGirFwQ4YnvQoAygVlh4TDEKdVQ4HOZYjBeZ8L8ZUJsmqylCNm+oTiFyv3MhayjqXsZB4dX6OhXQPHBNw==}
+
+  '@iconify-json/ic@1.1.17':
+    resolution: {integrity: sha512-EvAjZzVESmN36zlyefylePUNaU2BQ3eRKVZ6KQSQ2bG01ppoZaiFZRri74VTyvp5Mlv2yn68ux1fgCoT+etGmA==}
 
   '@iconify-json/mdi@1.1.67':
     resolution: {integrity: sha512-00nllHES8hyACwIfgySlQgAE6MKgpr2wsKfpifMiZWZ9aXC5l4Jb0lR3lJSWwXgOW6kzAOdzC3T+2VOfBBZ13A==}
@@ -2907,6 +2913,10 @@ snapshots:
     optional: true
 
   '@fontsource/sarabun@5.0.20': {}
+
+  '@iconify-json/ic@1.1.17':
+    dependencies:
+      '@iconify/types': 2.0.0
 
   '@iconify-json/mdi@1.1.67':
     dependencies:

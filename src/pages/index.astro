@@ -1,7 +1,52 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
 ---
 
 <BaseLayout>
-  Hello, homepage.
+  <Fragment slot="outer">
+    <header class="py-12">
+      <div class="container">
+        <div class="flex items-center justify-center gap-6">
+          <div class="flex">
+            <div class="text-center">
+              <h1 class="text-4xl font-bold text-blue-700">นครโค้ด สอนพัฒนาโปรแกรม</h1>
+              <p class="text-xl mt-2">สำหรับสายงาน Full-stack Web Developer</p>
+              <div class="flex justify-center gap-1 mt-6">
+                <a class="btn bg-gray-700 hover:bg-gray-900" href="/courses">
+                  <Icon name="mdi:video" class="text-xl"></Icon>
+                  <span>คอร์สเรียนฟรีทั้งหมด</span>
+                </a>
+                <a class="btn bg-red-600 hover:bg-red-800" href="https://www.youtube.com/@nakorncode">
+                  <Icon name="mdi:youtube" class="text-xl"></Icon>
+                  <span>ช่อง YouTube</span>
+                </a>
+                <a class="btn bg-indigo-600 hover:bg-indigo-800" href="https://discord.gg/fPtPJgWcF3">
+                  <Icon name="ic:baseline-discord" class="text-xl"></Icon>
+                  <span>พูดคุยผ่าน Discord</span>
+                </a>
+                <a class="btn bg-blue-600 hover:bg-blue-800" href="https://www.facebook.com/nakorncode">
+                  <Icon name="mdi:facebook" class="text-xl"></Icon>
+                  <span>ติดตามบน Facebook</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="py-8 bg-gray-100">
+      <div class="container">
+        <p>Hello</p>
+      </div>
+    </section>
+  </Fragment>
 </BaseLayout>
+
+<style>
+.btn {
+  @apply flex items-center gap-1 px-3 py-2 text-white rounded-md transition;
+}
+</style>
